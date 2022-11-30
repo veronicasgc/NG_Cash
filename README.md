@@ -1,4 +1,3 @@
-# NG_Cash
 
 <h1 align="center"> ⚙ Back-end</h1>
 <br/>
