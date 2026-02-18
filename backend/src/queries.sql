@@ -1,28 +1,25 @@
--- Active: 1669040381436@@localhost@5432@NG_Cash
-CREATE TABLE Users_NGCASH (
-    id BIGINT PRIMARY KEY  ,
-    username VARCHAR(255) NOT NULL,
-    password VARCHAR(255) NOT NULL ,
-    accountId BIGINT NOT NULL ,
-    FOREIGN KEY (accountId) REFERENCES Accounts_NGCASH(id)
+-- ACCOUNTS
+CREATE TABLE accounts (
+    id BIGSERIAL PRIMARY KEY,
+    balance NUMERIC(15,2) NOT NULL DEFAULT 100.00
 );
 
-CREATE TABLE Accounts_NGCASH (
-    id BIGINT PRIMARY KEY  ,
-   balance DECIMAL DEFAULT 100
+-- USERS
+CREATE TABLE users (
+    id BIGSERIAL PRIMARY KEY,
+    username VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    accountid BIGINT NOT NULL,
+    FOREIGN KEY (accountid) REFERENCES accounts(id)
 );
 
-CREATE TABLE Transactions_NGCASH (
-    id BIGINT PRIMARY KEY  ,
-    debitedAccountId BIGINT NOT NULL ,
-    creditedAccountId BIGINT NOT NULL,
-    value BIGINT NOT NULL,
-    createdAt DATE NOT NULL,
-    FOREIGN KEY (debitedAccountId) REFERENCES Accounts_NGCASH(id),
-    FOREIGN KEY (creditedAccountId) REFERENCES Accounts_NGCASH(id)
+-- TRANSACTIONS
+CREATE TABLE transactions (
+    id BIGSERIAL PRIMARY KEY,
+    debitedaccountid BIGINT NOT NULL,
+    creditedaccountid BIGINT NOT NULL,
+    value NUMERIC(15,2) NOT NULL,
+    createdat TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (debitedaccountid) REFERENCES accounts(id),
+    FOREIGN KEY (creditedaccountid) REFERENCES accounts(id)
 );
-
-SELECT * FROM accounts_ngcash
-WHERE id = 1669378931533 
-JOIN transactions_ngcash ON transactions_ngcash.debitedAccountId = accounts_ngcash.id
-

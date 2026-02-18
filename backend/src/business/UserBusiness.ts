@@ -7,7 +7,7 @@ import { AccountDatabase } from "../data/AccountDatabase";
 import { HashManager } from "../services/HashManager";
 import { IdGenerator } from "../services/IdGenerator";
 import { Authenticator } from "../services/Authenticator";
-import { AccountInputDTO, AccountInsert } from "../models/account";
+import { AccountInputDTO } from "../models/account";
 
 export class UserBusiness {
     async signup(signup: SignupInputDTO) {
@@ -28,9 +28,7 @@ export class UserBusiness {
            
             let r: any = /^(?=(?:.?[A-Z]){1})(?=(?:.?[0-9]){1})/;
             console.log(r.test(password))
-            // if(!r.test(password)){
-            //   throw new Error("nao foi")
-            // }
+           
           
             const userDatabase = new UserDatabase()
             const findUsername = await userDatabase.findUsername(username);

@@ -3,7 +3,7 @@ import { AccountInputDTO, UpdateBalance} from "../models/account";
 import { BaseError } from "../error/BaseError";
 
 export class AccountDatabase extends BaseDatabase {
-    private static TABLE_NAME = "accounts_ngcash"
+    private static TABLE_NAME = "accounts"
 
     async createAccount(account: AccountInputDTO): Promise<any> {
         try {  
@@ -20,7 +20,7 @@ export class AccountDatabase extends BaseDatabase {
     }
     async selectAccountById(id: number): Promise<any>{
         try{
-            const account = await AccountDatabase.connection
+            const [account] = await AccountDatabase.connection
                 .select("id", "balance")
                 .where({id})
                 .into(AccountDatabase.TABLE_NAME)
@@ -31,5 +31,18 @@ export class AccountDatabase extends BaseDatabase {
             throw new BaseError(error.statusCode, error.sqlMessage || error.message)
         }
     }
+
+    async updateBalance(id: number, newBalance: number): Promise<void> {
+        try {
+    await AccountDatabase.connection
+      .update({ balance: newBalance })
+      .where({ id })
+      .into(AccountDatabase.TABLE_NAME)
+
+  } catch (error: any) {
+    throw new BaseError(error.statusCode, error.sqlMessage || error.message)
+  }
+}
+
    
 }

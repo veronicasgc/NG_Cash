@@ -14,7 +14,7 @@ export class AccountBusiness {
     async loginAccount(login: LoginAccount) {
         try {
             const { username, password } = login
-
+            
             if (!username || !password) {
                 throw new MissingFields()
             }

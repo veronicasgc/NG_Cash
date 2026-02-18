@@ -1,9 +1,9 @@
 import { BaseDatabase } from "./BaseDatabase";
-import { User, UserToken } from "../models/user";
+import { User} from "../models/user";
 import { BaseError } from "../error/BaseError";
 
 export class UserDatabase extends BaseDatabase {
-    private static TABLE_NAME = "users_ngcash"
+    private static TABLE_NAME = "users"
 
     async signup(user: User) {
         try {
@@ -29,7 +29,7 @@ export class UserDatabase extends BaseDatabase {
         }
     }
     async getAllUsers(){
-        const users = await UserDatabase.connection(UserDatabase.TABLE_NAME).select()
+        const users = await UserDatabase.connection(UserDatabase.TABLE_NAME).select("id", "username", "accountid")
         return users
         
     }
@@ -38,7 +38,7 @@ export class UserDatabase extends BaseDatabase {
             const user = await UserDatabase.connection
                 .select()
                 .where({username})
-                .join("accounts_ngcash","accounts_ngcash.accountid", "users_ngcash.id")
+                .join("accounts","accounts.accountid", "users.id")
                 .into(UserDatabase.TABLE_NAME)
 
 
@@ -52,7 +52,7 @@ export class UserDatabase extends BaseDatabase {
         try {
             const tokenUser = await UserDatabase.connection
                .select("token")
-               .where({"users_ngcash.id":id})
+               .where({"users.id":id})
                .into(UserDatabase.TABLE_NAME)
 
                return tokenUser
