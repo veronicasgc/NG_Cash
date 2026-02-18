@@ -46,12 +46,15 @@ Instale dependências:
 npm install
 
 Crie um arquivo `.env` na raiz:
+
+```env
 DB_USERNAME=
 DB_DATABASE=
 DB_HOSTNAME=
 DB_PASSWORD=
 DB_PORT=5432
 JWT_KEY=
+```
 
 
 Crie as tabelas utilizando o arquivo:
