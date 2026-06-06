@@ -14,7 +14,7 @@ export class invalidPassword extends BaseError {
 
 export class invalidUserRegister extends BaseError {
     constructor() {
-        super(404, "This username is already registered")
+        super(400, "This username is already registered")
     }
 }
 
