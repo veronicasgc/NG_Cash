@@ -28,7 +28,7 @@ Mensagem informando que usuário não está registrado no sistema.
 
 ## Evidência
 
-Arquivo: evidencias/usuario-inexistente.png
+Arquivo: evidencias/login/003-usuario-inexistente.png
 
 ## Status
 

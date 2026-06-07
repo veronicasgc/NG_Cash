@@ -30,7 +30,7 @@ Login não efetuado.
 
 ## Evidência
 
-Arquivo: evidencias/senha-incorreta-formato-valido.png
+Arquivo: evidencias/login/008-senha-incorreta-formato-valido.png
 
 ## Status
 

@@ -1,14 +1,14 @@
-# CT-005 Login sem username
+# CT-005 Login sem password
 
 ## Objetivo:
-Validar o comportamento da API quando o campo username não é informado.
+Validar o comportamento da API quando o campo password não é informado.
 
 ## Pré-condição
-Campo username não informado e password preenchido corretamente.
+Campo username preenchido corretamente e password não informado.
 
 ## Passos
-1. Enviar username vazio.
-2. Enviar password válido.
+1. Enviar username válido.
+2. Enviar password vazio.
 3. Executar endpoint POST /login.
 
 ## Resultado esperado
@@ -26,7 +26,7 @@ Login não efetuado.
 
 ## Evidência
 
-Arquivo: evidencias/login-sem-username.png
+Arquivo: evidencias/login/006-login-sem-password.png
 
 ## Status
 

@@ -37,7 +37,7 @@ O usuário recebe uma mensagem que não corresponde ao erro real ocorrido, dific
 
 ## Evidência
 
-Arquivo: evidencias/senha-incorreta-formato-valido.png
+Arquivo: evidencias/login/008-senha-incorreta-formato-valido.png
 
 ## Severidade
 

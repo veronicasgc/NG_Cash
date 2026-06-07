@@ -1,14 +1,14 @@
-# CT-005 Login sem body
+# CT-005 Login sem username
 
 ## Objetivo:
-Validar o comportamento da API quando os campos do body não são informados.
+Validar o comportamento da API quando o campo username não é informado.
 
 ## Pré-condição
-Campo username e password não informados.
+Campo username não informado e password preenchido corretamente.
 
 ## Passos
 1. Enviar username vazio.
-2. Enviar password vazio.
+2. Enviar password válido.
 3. Executar endpoint POST /login.
 
 ## Resultado esperado
@@ -26,7 +26,7 @@ Login não efetuado.
 
 ## Evidência
 
-Arquivo: evidencias/login-sem-body.png
+Arquivo: evidencias/login/005-login-sem-username.png
 
 ## Status
 

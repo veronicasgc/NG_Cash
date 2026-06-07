@@ -23,7 +23,7 @@ Mensagem informando que a senha deve ter um mínimo obrigatório de caracteres.
 
 ## Evidência
 
-Arquivo: evidencias/senha-fora-do-padrao.png
+Arquivo: evidencias/login/002-senha-fora-do-padrao.png
 
 ## Status
 
