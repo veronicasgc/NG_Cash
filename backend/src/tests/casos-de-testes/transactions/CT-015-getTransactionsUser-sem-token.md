@@ -39,5 +39,6 @@ REPROVADO
 
 ## Observação:
 
-Foi encontrado o BUG-003. 
-A API retorna um erro de servidor (Status 500) em vez de um código de erro de cliente (401 ou 400) ao identificar a ausência do token, indicando falta de tratamento de exceção no middleware de autenticação. Além disso, a mensagem contém o erro de grafia "Tokem".
+Comportamento relacionado ao BUG-003.
+Ver detalhes em:
+bugs-encontrados/transactions/bug-003-tratamento-incorreto-de-validacoes-e-autenticacao-getTransactionsUser.md

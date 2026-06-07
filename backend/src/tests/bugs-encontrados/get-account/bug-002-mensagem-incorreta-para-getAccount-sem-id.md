@@ -39,7 +39,7 @@ Arquivo: evidencias/get-account/012-getAccount-sem-id.png
 
 ## Severidade
 
-Alta
+Média
 
 ## Prioridade
 
