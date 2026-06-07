@@ -1,0 +1,1219 @@
+{
+  "info": {
+    "_postman_id": "9ae34033-c36d-4398-94b3-64ae02c3e7ae",
+    "name": "NG Cash API",
+    "description": "## 📌 Sobre o Projeto\n\nAPI backend desenvolvida para simular um sistema bancário simplificado, com autenticação de usuários, consulta de saldo e registro de transações financeiras.\n\nO sistema garante:\n\n- Criação automática de conta ao cadastrar usuário\n    \n- Validação de saldo antes de transferências\n    \n- Registro histórico de transações\n    \n- Proteção de rotas via autenticação JWT\n    \n\nO projeto foi estruturado utilizando arquitetura em camadas:\n\nController → Business → Data → Services\n\nCom separação clara de responsabilidades e tratamento de erros customizados.\n\n---\n\n## 🛠 Tecnologias Utilizadas\n\n- Node.js\n    \n- TypeScript\n    \n- Express\n    \n- PostgreSQL\n    \n- Knex\n    \n- JWT (autenticação)\n    \n- Bcrypt (hash de senha)\n    \n- Postman (testes de API)\n    \n\n---\n\n## 🏗 Arquitetura\n\nO projeto segue o padrão de separação em camadas:\n\n- **Controller**: Responsável por receber requisições HTTP e retornar respostas.\n    \n- **Business**: Contém as regras de negócio e validações.\n    \n- **Data**: Comunicação com o banco de dados.\n    \n- **Services**: Autenticação e criptografia.\n    \n- **Error**: Tratamento de erros personalizados.\n    \n\n---\n\n## 🔐 Autenticação\n\nA API utiliza autenticação via JWT.\n\nApós o login, o token retornado deve ser enviado no header:\n\nAuthorization: Bearer {token}\n\n## 💰 Regra de Negócio Principal\n\n- Cada usuário possui uma conta associada.\n    \n- Transferências só são realizadas se houver saldo suficiente.\n    \n- O sistema impede saldo negativo.\n    \n- Todas as transações são registradas com data e hora.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "21025086"
+  },
+  "item": [
+    {
+      "name": "/user/signup",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"username\": \"Diogo\",\r\n    \"password\": \"Di12345656\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3003/user/signup",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3003",
+          "path": [
+            "user",
+            "signup"
+          ]
+        },
+        "description": "Need to pass username and password by body"
+      },
+      "response": [
+        {
+          "name": "200 - Success",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\": \"Vanessa\",\r\n    \"password\": \"Va12345656\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3003/user/signup",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3003",
+              "path": [
+                "user",
+                "signup"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "207"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"cf-K8Qoc+aad+trYDETFrWmNcZ1uTk\""
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 18 Feb 2026 18:51:46 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"message\": \"Successfully registered user!\",\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTc3MTQ0MDcwNjMwMiwiaWF0IjoxNzcxNDQwNzA2LCJleHAiOjE3NzE1MjcxMDZ9.zvpxnMCD3FeB1U0PgyjTs20OvkwrFvyXvzDP5s3GhG0\"\n}"
+        },
+        {
+          "name": "400 - User already registered",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\": \"Andréia\",\r\n    \"password\": \"An12345656\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3003/user/signup",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3003",
+              "path": [
+                "user",
+                "signup"
+              ]
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "47"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"2f-X9WKTe1WU0bdWDg47BO6vZN27H8\""
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 18 Feb 2026 22:11:20 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"error\": \"This username is already registered\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "login",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"username\": \"Diogo\",\r\n    \"password\": \"Di12345656\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3003/account/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3003",
+          "path": [
+            "account",
+            "login"
+          ]
+        },
+        "description": "Need to pass username and password by body"
+      },
+      "response": [
+        {
+          "name": "200 - Success",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\": \"Diogo\",\r\n    \"password\": \"Di12345656\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3003/account/login",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3003",
+              "path": [
+                "account",
+                "login"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "168"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"a8-Es4gikyXHIROmrIK49j5b0Poq24\""
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 18 Feb 2026 19:00:16 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE3NzE0NDAyODE5NjMiLCJpYXQiOjE3NzE0NDEyMTYsImV4cCI6MTc3MTUyNzYxNn0.d3TlzZoza8yqjLLL6H5BPGhB1DXYjBMl__9BJE8YdlQ\"\n}"
+        },
+        {
+          "name": "400 - Invalid Password",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\": \"Diogo\",\r\n    \"password\": \"Di1234565\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3003/account/login",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3003",
+              "path": [
+                "account",
+                "login"
+              ]
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "text/html; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "78"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"4e-BWNMtncQbYDHFgT+dAbfodoaSOE\""
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 18 Feb 2026 19:01:06 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "Invalid password! Must be at least 8 characters. A number and a capital letter"
+        },
+        {
+          "name": "400 - Invalid Username",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\": \"Dioo\",\r\n    \"password\": \"Di12345656\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3003/account/login",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3003",
+              "path": [
+                "account",
+                "login"
+              ]
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "text/html; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "22"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"16-TGnZKh/0G4BZvgJBOFjx6F+8BJU\""
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 18 Feb 2026 19:02:42 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "User is not registered"
+        }
+      ]
+    },
+    {
+      "name": "getAccount",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "authorization",
+            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE2Njk3NTE0OTM0NDgiLCJpYXQiOjE2Njk3NTE1MTAsImV4cCI6MTY2OTgzNzkxMH0.H9-f2FS2_P7wOMZ9xSbbuVRNrJIedChIPuYO3ubSdkg",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:3003/account/?id=1669751493448",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3003",
+          "path": [
+            "account",
+            ""
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "1669751493448"
+            }
+          ]
+        },
+        "description": "Need to pass account id"
+      },
+      "response": []
+    },
+    {
+      "name": "createTransactionUser",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "authorization",
+            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE2NjkwNjUyMzcwMzAiLCJpYXQiOjE2Njk3NDgyNzAsImV4cCI6MTY2OTgzNDY3MH0.Tgm_YP2bZo80z4hKQOS_JlgWj5UoGK2v5nPATcvBWpM",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n     \"debitedaccountid\":\"1669665291606\", \r\n     \"creditedaccountid\": \"1669666321354\", \r\n     \"value\":2,\r\n     \"createdat\": \"2022/11/29\"\r\n    \r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3003/transaction/add",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3003",
+          "path": [
+            "transaction",
+            "add"
+          ]
+        },
+        "description": "Need to pass token authorization"
+      },
+      "response": [
+        {
+          "name": "200 - Success",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "authorization",
+                "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE3NzE0NDAyODE5NjMiLCJpYXQiOjE3NzE0NDE0MTMsImV4cCI6MTc3MTUyNzgxM30.ZMhF0HwFaALer38aYsu7y2Zp-Pa_gLIrKHSdfcXZxLM",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n     \"debitedaccountid\":\"1771440706302\", \r\n     \"creditedaccountid\": \"1771440281963\", \r\n     \"value\":20,\r\n     \"createdat\": \"2022/11/29\"\r\n    \r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3003/transaction/add",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3003",
+              "path": [
+                "transaction",
+                "add"
+              ]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "50"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"32-zfkJcfLbHancLIGyfWbmpWe4sMs\""
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 18 Feb 2026 19:21:13 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"message\": \"Transaction registered successfully!\"\n}"
+        },
+        {
+          "name": "400 - Insufficient Funds",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "authorization",
+                "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE3NzE0NDAyODE5NjMiLCJpYXQiOjE3NzE0NDE0MTMsImV4cCI6MTc3MTUyNzgxM30.ZMhF0HwFaALer38aYsu7y2Zp-Pa_gLIrKHSdfcXZxLM",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n     \"debitedaccountid\":\"1771440281963\", \r\n     \"creditedaccountid\": \"1771440706302\", \r\n     \"value\":120,\r\n     \"createdat\": \"2022/11/29\"\r\n    \r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3003/transaction/add",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3003",
+              "path": [
+                "transaction",
+                "add"
+              ]
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "text/html; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "18"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"12-DxtPuRwxrhqWsnsGVfW9/N6qBIs\""
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 18 Feb 2026 20:40:00 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "Insufficient funds"
+        },
+        {
+          "name": "400 - Account Not Found",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "authorization",
+                "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE3NzE0NDAyODE5NjMiLCJpYXQiOjE3NzE0NDE0MTMsImV4cCI6MTc3MTUyNzgxM30.ZMhF0HwFaALer38aYsu7y2Zp-Pa_gLIrKHSdfcXZxLM",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n     \"debitedaccountid\":\"1771440281963\", \r\n     \"creditedaccountid\": \"15345353533455\", \r\n     \"value\":120,\r\n     \"createdat\": \"2022/11/29\"\r\n    \r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3003/transaction/add",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3003",
+              "path": [
+                "transaction",
+                "add"
+              ]
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "text/html; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "26"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"1a-FS4tgkDWYCmT64+KoM4ZosFBZy0\""
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 18 Feb 2026 20:41:35 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "Credited account not found"
+        }
+      ]
+    },
+    {
+      "name": "getTransactionsUser",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "authorization",
+            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE2Njk3NTE0OTM0NDgiLCJpYXQiOjE2Njk3NTE1MTAsImV4cCI6MTY2OTgzNzkxMH0.H9-f2FS2_P7wOMZ9xSbbuVRNrJIedChIPuYO3ubSdkg",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:3003/transaction/?id=1669751493448",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3003",
+          "path": [
+            "transaction",
+            ""
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "1669751493448"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "200 - Success",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "authorization",
+                "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE3NzE0NDAyODE5NjMiLCJpYXQiOjE3NzE0NDgxMjEsImV4cCI6MTc3MTUzNDUyMX0.l3qKb-qXtbdQJun7fxBQesSMLJ0Q4NqCNjSJjkAgPHk",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3003/transaction/?id=1771440706302",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3003",
+              "path": [
+                "transaction",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "1771440706302"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "279"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"117-vpL9+v+CZgSOi1wVntAXDyOo0zE\""
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 18 Feb 2026 20:55:56 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "[\n    {\n        \"debitedaccountid\": \"1771440281963\",\n        \"receiver\": \"1771440706302\",\n        \"value\": \"120.00\",\n        \"createdat\": \"2022-11-29T03:00:00.000Z\",\n        \"username\": \"Diogo\"\n    },\n    {\n        \"debitedaccountid\": \"1771440281963\",\n        \"receiver\": \"1771440706302\",\n        \"value\": \"120.00\",\n        \"createdat\": \"2022-11-29T03:00:00.000Z\",\n        \"username\": \"Diogo\"\n    }\n]"
+        },
+        {
+          "name": "500 - Unauthorized access",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "authorization",
+                "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE3NzE0NDAyODE5NjMiLCJpYXQiOjE3NzE0NDkxNDgsImV4cCI6MTc3MTUzNTU0OH0.C9QUfeZtepFcDUOrp0edxLrxVYA4_je5mVgnjrVRgcc",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3003/transaction/?id=1771440706302",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3003",
+              "path": [
+                "transaction",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "1771440706302"
+                }
+              ]
+            }
+          },
+          "status": "Internal Server Error",
+          "code": 500,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "text/html; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "19"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"13-nY+R2gchPj5OOC7e/cKtbPu5dHY\""
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 18 Feb 2026 21:17:01 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "Unauthorized access"
+        },
+        {
+          "name": "500 - Invalid Token",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "authorization",
+                "value": "eJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE3NzE0NDAyODE5NjMiLCJpYXQiOjE3NzE0NDkxNDgsImV4cCI6MTc3MTUzNTU0OH0.C9QUfeZtepFcDUOrp0edxLrxVYA4_je5mVgnjrVRgcc",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3003/transaction/?id=1771440281963",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3003",
+              "path": [
+                "transaction",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "1771440281963"
+                }
+              ]
+            }
+          },
+          "status": "Internal Server Error",
+          "code": 500,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "text/html; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "13"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"d-Mr7wzk9Do9Jf7dTLxrB3S64eldY\""
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 18 Feb 2026 21:18:08 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "invalid token"
+        }
+      ]
+    },
+    {
+      "name": "getAllUsers",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3003/user/",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3003",
+          "path": [
+            "user",
+            ""
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "200 - Success",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3003/user/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3003",
+              "path": [
+                "user",
+                ""
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "143"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"8f-7SPsJ8fr4Tta3oe+WDrh2aHaW7A\""
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 18 Feb 2026 20:48:02 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "[\n    {\n        \"id\": \"1771440281963\",\n        \"username\": \"Diogo\",\n        \"accountid\": \"1771440281963\"\n    },\n    {\n        \"id\": \"1771440706302\",\n        \"username\": \"Vanessa\",\n        \"accountid\": \"1771440706302\"\n    }\n]"
+        }
+      ]
+    },
+    {
+      "name": "findTransactionByDate",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "authorization",
+            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE2NjkwNjUyMzcwMzAiLCJpYXQiOjE2Njk3NDgyNzAsImV4cCI6MTY2OTgzNDY3MH0.Tgm_YP2bZo80z4hKQOS_JlgWj5UoGK2v5nPATcvBWpM",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:3003/transaction/date?id=1669065237030&createdat=2022-11-29",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3003",
+          "path": [
+            "transaction",
+            "date"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "1669065237030"
+            },
+            {
+              "key": "createdat",
+              "value": "2022-11-29"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "400 - Invalid Token",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "authorization",
+                "value": "eyJhbGciiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE3NzE0NDAyODE5NjMiLCJpYXQiOjE3NzE0NDkxNDgsImV4cCI6MTc3MTUzNTU0OH0.C9QUfeZtepFcDUOrp0edxLrxVYA4_je5mVgnjrVRgcc",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3003/transaction/date?id=1771440281963&createdat=2022-11-29",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3003",
+              "path": [
+                "transaction",
+                "date"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "1771440281963"
+                },
+                {
+                  "key": "createdat",
+                  "value": "2022-11-29"
+                }
+              ]
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "text/html; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "13"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"d-Mr7wzk9Do9Jf7dTLxrB3S64eldY\""
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 18 Feb 2026 21:29:41 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "invalid token"
+        },
+        {
+          "name": "200 - Success",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "authorization",
+                "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE3NzE0NDAyODE5NjMiLCJpYXQiOjE3NzE0NDkxNDgsImV4cCI6MTc3MTUzNTU0OH0.C9QUfeZtepFcDUOrp0edxLrxVYA4_je5mVgnjrVRgcc",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3003/transaction/date?id=1771440281963&createdat=2022-11-29",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3003",
+              "path": [
+                "transaction",
+                "date"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "1771440281963"
+                },
+                {
+                  "key": "createdat",
+                  "value": "2022-11-29"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "213"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"d5-WF6qzds4b94Va/veM7gAj99GyHk\""
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 18 Feb 2026 21:30:18 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "[\n    {\n        \"debitedaccountid\": \"1771440281963\",\n        \"receiver\": \"1771440706302\",\n        \"value\": \"120.00\",\n        \"createdat\": \"2022-11-29\"\n    },\n    {\n        \"debitedaccountid\": \"1771440281963\",\n        \"receiver\": \"1771440706302\",\n        \"value\": \"120.00\",\n        \"createdat\": \"2022-11-29\"\n    }\n]"
+        },
+        {
+          "name": "400 - Invalid or Incomplete Id",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "authorization",
+                "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE3NzE0NDAyODE5NjMiLCJpYXQiOjE3NzE0NDkxNDgsImV4cCI6MTc3MTUzNTU0OH0.C9QUfeZtepFcDUOrp0edxLrxVYA4_je5mVgnjrVRgcc",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3003/transaction/date?id=&createdat=2022-11-29",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3003",
+              "path": [
+                "transaction",
+                "date"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": ""
+                },
+                {
+                  "key": "createdat",
+                  "value": "2022-11-29",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Content-Type",
+              "value": "text/html; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "24"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"18-Wlaz8romnqU3X176kL5JMdZpu/0\""
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 18 Feb 2026 21:35:28 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "Invalid or incomplete id"
+        }
+      ]
+    }
+  ]
+}
