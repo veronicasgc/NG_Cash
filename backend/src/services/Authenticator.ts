@@ -5,7 +5,7 @@ import dotenv from "dotenv"
 dotenv.config()
 
 export class Authenticator {
-  public generateToken = (payload: AuthenticationData): any => {
+  public generateToken (payload: AuthenticationData): string  {
     const token = jwt.sign(payload,
       process.env.JWT_KEY as any,
       { expiresIn: "24h" });

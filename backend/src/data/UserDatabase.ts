@@ -48,17 +48,5 @@ export class UserDatabase extends BaseDatabase {
             throw new BaseError(error.statusCode, error.sqlMessage || error.message)
         }
     }
-    async getTokenUser(id: number) {
-        try {
-            const tokenUser = await UserDatabase.connection
-               .select("token")
-               .where({"users.id":id})
-               .into(UserDatabase.TABLE_NAME)
-
-               return tokenUser
-               
-    } catch (error: any) {
-    throw new BaseError(error.statusCode, error.sqlMessage || error.message)
-}
-    }
+  
 }

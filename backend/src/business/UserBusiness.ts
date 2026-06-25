@@ -27,8 +27,7 @@ export class UserBusiness {
             }
            
             let r: any = /^(?=(?:.?[A-Z]){1})(?=(?:.?[0-9]){1})/;
-            console.log(r.test(password))
-           
+                       
           
             const userDatabase = new UserDatabase()
             const findUsername = await userDatabase.findUsername(username);
@@ -59,7 +58,7 @@ export class UserBusiness {
             await userDatabase.signup(newSignup)
 
             const authenticator = new Authenticator()
-            const accessToken = await authenticator.generateToken({ id })
+            const accessToken = authenticator.generateToken({ id })
           
             return accessToken
 
@@ -72,15 +71,5 @@ export class UserBusiness {
         const users = await userDatabase.getAllUsers()
         return users
     }
-    async getTokenUser(id: number){
-
-              
-        const userDatabase = new UserDatabase()
-        const tokenUser = await userDatabase.getTokenUser(id) 
-
-        const authenticator = new Authenticator()
-        const token = authenticator.getTokenData({ id :tokenUser })
-
-        return token
-    }
+   
 }

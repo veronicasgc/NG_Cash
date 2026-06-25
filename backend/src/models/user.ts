@@ -11,9 +11,6 @@ export interface SignupInputDTO {
 }
 
 export interface AuthenticationData {
-    id: any
+    id: number
 }
 
-export interface UserToken extends User{
-    token: string
-}

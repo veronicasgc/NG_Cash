@@ -36,7 +36,9 @@ Esse comportamento possibilita a enumeração de usuários do sistema e o acesso
 
 ## Evidência
 
+Evidência 1:
 Arquivo: evidencias/users/046-getAllUsers-retorna-usuarios.png
+Evidência 2: análise do UserBusiness.getAllUsers() confirma que não existe validação de autenticação ou autorização.
 
 ## Severidade
 
