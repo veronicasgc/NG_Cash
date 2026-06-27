@@ -13,7 +13,7 @@ export class Authenticator {
     return token;
   };
 
-  public getTokenData = (token: any): AuthenticationData => {
+  public getTokenData  (token: any): AuthenticationData  {
 
     const payload = jwt.verify(token, process.env.JWT_KEY as any) as jwt.JwtPayload
     const result: AuthenticationData = { id: payload.id }

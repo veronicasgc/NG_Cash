@@ -24,6 +24,9 @@ Cenários afetados:
 ## Evidência:
 
 Arquivo: tests\unit\evidencias\BUG-001-username-empty.png
+Arquivo: tests\unit\evidencias\BUG-001-username-less-than-3
+Arquivo: tests\unit\evidencias\BUG-001-password-less-than-8
+Arquivo: tests\unit\evidencias\BUG-001-password-empty
 
 ## Impacto:
 
