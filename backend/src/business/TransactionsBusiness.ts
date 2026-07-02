@@ -27,11 +27,7 @@ export class TransactionsBusiness {
         throw new MissingFields();
       }
 
-      const authenticatorData = new Authenticator().getTokenData(token);
-
-      if (!authenticatorData.id) {
-        throw new invalidAuthenticatorData();
-      }
+      new Authenticator().getTokenData(token);
 
       const accountDatabase = new AccountDatabase();
 
@@ -49,11 +45,6 @@ export class TransactionsBusiness {
         throw new Error("Credited account not found");
       }
 
-      console.log("DebitedAccount:", debitedAccount);
-      console.log("Balance raw:", debitedAccount?.balance);
-      console.log("Type of balance:", typeof debitedAccount?.balance);
-
-      // 🔥 Conversão segura
       const currentBalance = Number(debitedAccount.balance);
       const creditedBalance = Number(creditedAccount.balance);
       const transactionValue = Number(value);
@@ -70,7 +61,6 @@ export class TransactionsBusiness {
         throw new InsufficientFunds();
       }
 
-      // ✅ Atualiza saldos
       await accountDatabase.updateBalance(
         debitedaccountid,
         currentBalance - transactionValue,
@@ -109,9 +99,7 @@ export class TransactionsBusiness {
       }
 
       const authenticatorData = new Authenticator().getTokenData(token);
-      if (!authenticatorData.id) {
-        throw new invalidAuthenticatorData();
-      }
+     
       if (Number(authenticatorData.id) !== Number(id)) {
         throw new Error("Unauthorized access");
       }
@@ -138,12 +126,11 @@ export class TransactionsBusiness {
         throw new Error("Date not validated");
       }
 
-      const authenticatorData = new Authenticator().getTokenData(token);
+      new Authenticator().getTokenData(token);
+      
 
-      if (!authenticatorData.id) {
-        throw new invalidAuthenticatorData();
-      }
-      if (!id || isNaN(id) || id.toString().length !== 13) {
+     
+      if (!id || isNaN(id)) {
         throw new Error("Invalid or incomplete id");
       }
       const trasactionDatabase = new TransactionsDatabase();

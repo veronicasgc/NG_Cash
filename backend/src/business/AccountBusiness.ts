@@ -6,65 +6,62 @@ import { UserDatabase } from "../data/UserDatabase";
 import { Authenticator } from "../services/Authenticator";
 import { invalidPassword, invalidUser } from "../error/UserError";
 import { BaseError } from "../error/BaseError";
-import { invalidAuthenticatorData, invalidToken } from "../error/AuthenticatorError";
+import {
+  invalidAuthenticatorData,
+  invalidToken,
+} from "../error/AuthenticatorError";
 import { invalidAccount } from "../error/AccountError";
 
 export class AccountBusiness {
+  async loginAccount(login: LoginAccount) {
+    try {
+      const { username, password } = login;
 
-    async loginAccount(login: LoginAccount) {
-        try {
-            const { username, password } = login
-            
-            if (!username || !password) {
-                throw new MissingFields()
-            }
-            const userDatabase = new UserDatabase()
-            const user = await userDatabase.findUsername(username)
+      if (!username || !password) {
+        throw new MissingFields();
+      }
+      const userDatabase = new UserDatabase();
+      const user = await userDatabase.findUsername(username);
 
-            if (!user) {
-                throw new invalidUser()
-            }
+      if (!user) {
+        throw new invalidUser();
+      }
 
-            const hashManager = new HashManager()
-            const passwordIsCorrect:boolean = await hashManager.compare(
-                password,
-                user.password,
-               
-            );
-                
-            if (!passwordIsCorrect) {
-                throw new invalidPassword()
-            }
+      const hashManager = new HashManager();
+      const passwordIsCorrect: boolean = await hashManager.compare(
+        password,
+        user.password,
+      );
 
-            const authenticator = new Authenticator()
-            const token = authenticator.generateToken({ id: user.id })
-           
-            return token
+      if (!passwordIsCorrect) {
+        throw new invalidPassword();
+      }
 
-        } catch (error: any) {
-            throw new BaseError(error.statusCode, error.sqlMessage || error.message);
-        }
+      const authenticator = new Authenticator();
+      const token = authenticator.generateToken({ id: user.id });
+
+      return token;
+    } catch (error: any) {
+      throw new BaseError(error.statusCode, error.sqlMessage || error.message);
     }
-    async accountById(id: number, token: string) {
-        try {
-            if (!token) {
-                throw new invalidToken()
-            }
+  }
+  async accountById(id: number, token: string) {
+    try {
+      if (!token) {
+        throw new invalidToken();
+      }
 
-            const authenticator = new Authenticator().getTokenData(token)
-            if (!authenticator.id) {
-                throw new invalidAuthenticatorData()
-            }
-            const accountDatabase = new AccountDatabase()
-            const account = await accountDatabase.selectAccountById(id)
+      new Authenticator().getTokenData(token);
 
-            if (!account) {
-                throw new invalidAccount()
-            }
-            return account
+      const accountDatabase = new AccountDatabase();
+      const account = await accountDatabase.selectAccountById(id);
 
-        } catch (error: any) {
-            throw new BaseError(error.statusCode, error.sqlMessage || error.message);
-        }
+      if (!account) {
+        throw new invalidAccount();
+      }
+      return account;
+    } catch (error: any) {
+      throw new BaseError(error.statusCode, error.sqlMessage || error.message);
     }
+  }
 }
