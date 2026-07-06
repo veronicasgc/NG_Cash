@@ -5,6 +5,7 @@ import { SignupInputDTO } from "../models/user";
 export class UserController {
   async signup(req: Request, res: Response) {
     try {
+      
       const { username, password } = req.body;
 
       const signup: SignupInputDTO = {
@@ -21,7 +22,7 @@ export class UserController {
       });
     } catch (error: any) {
       res.status(error.statusCode || 500).send({
-        error: error.message,
+        message: error.message,
       });
     }
   }

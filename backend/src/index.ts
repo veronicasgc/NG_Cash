@@ -1,8 +1,12 @@
 import {app} from './app';
-import { accountRouter } from './router/accountRouter';
-import { userRouter } from './router/userRouter';
-import{transactionsRouter} from './router/transactionsRouter';
+import { AddressInfo } from "net";
 
-app.use("/user", userRouter)
-app.use("/account", accountRouter)
-app.use("/transaction", transactionsRouter)
+
+const server = app.listen(process.env.PORT || 3003, () => {
+  if (server) {
+    const address = server.address() as AddressInfo;
+    console.log(`Server is running in http://localhost:${address.port}`);
+  } else {
+    console.error(`Failure upon starting server.`);
+  }
+});;
