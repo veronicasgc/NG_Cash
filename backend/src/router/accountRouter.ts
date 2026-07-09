@@ -8,4 +8,3 @@ const accountController = new AccountController()
 
 accountRouter.post("/login",  accountController.loginAccount)
 accountRouter.get("/", accountController.accountById)
-// accountRouter.put("update", accountController.updateBalance)
