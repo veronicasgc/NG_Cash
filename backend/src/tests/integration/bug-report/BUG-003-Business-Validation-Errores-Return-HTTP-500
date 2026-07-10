@@ -1,0 +1,124 @@
+# BUG-003 - Business Validation Errors Return HTTP 500
+
+## Identification
+
+- **ID:** BUG-003
+- **Module:** Transactions
+- **Endpoint:** POST /transaction/add
+- **Method:** POST
+- **Severity:** High
+- **Priority:** High
+- **Status:** Open
+
+---
+
+## Description
+
+Business validation errors are being returned as **HTTP 500 (Internal Server Error)** instead of the appropriate client error status (e.g., **HTTP 400 Bad Request**).
+
+The issue occurs because generic `Error` exceptions are wrapped into `BaseError` with a default status code of **500**, causing expected validation failures to be treated as internal server errors.
+
+---
+
+## Preconditions
+
+- API is running.
+- Valid JWT token.
+- Endpoint `POST /transaction/add` available.
+
+---
+
+## Steps to Reproduce
+
+### Scenario 1 - Debited account not found
+
+1. Send a **POST** request to:
+
+```
+/transaction/add
+```
+
+2. Use the following request body:
+
+```json
+{
+  "debitedaccountid": 178336734112,
+  "creditedaccountid": 1783031061142,
+  "value": 20,
+  "createdat": "2026-07-10"
+}
+```
+
+3. Send a valid JWT token in the `Authorization` header.
+
+---
+
+### Scenario 2 - Credited account not found
+
+```json
+{
+  "debitedaccountid": 1783367341294,
+  "creditedaccountid": 1783031061543,
+  "value": 20,
+  "createdat": "2026-07-10"
+}
+```
+
+---
+
+## Expected Result
+
+The API should return a business validation error, such as:
+
+- **HTTP 400 - Bad Request**
+
+Examples:
+
+```json
+{
+  "message": "Debited account not found"
+}
+```
+
+or
+
+```json
+{
+  "message": "Credited account not found"
+}
+```
+
+---
+
+## Actual Result
+
+The API returns:
+
+- **HTTP 500 - Internal Server Error**
+
+while preserving the validation message.
+
+---
+
+## Evidence
+
+Automated integration tests created with **Jest + Supertest**.
+
+Affected scenarios include:
+
+- Debited account not found
+- Credited account not found
+
+These tests are temporarily skipped because the current implementation returns **HTTP 500** instead of the expected **HTTP 400**.
+
+---
+
+## Impact
+
+Business validation failures are incorrectly reported as internal server errors, making it difficult for API consumers to distinguish between client-side validation issues and actual server failures.
+
+---
+
+## Possible Cause
+
+The `TransactionsBusiness` throws generic `Error` objects (e.g., `new Error("Debited account not found")`), which do not contain a `statusCode`. These exceptions are wrapped into `BaseError`, causing the default status code **500** to be returned instead of an appropriate client error.

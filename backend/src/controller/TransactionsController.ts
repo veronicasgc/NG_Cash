@@ -24,7 +24,9 @@ export class TransactionsController {
             res.status(201).send({ message: "Transaction registered successfully!" })
 
         } catch (error: any) {
-            res.status(400).send(error.message)
+      res.status(error.statusCode || 500).send({
+        message: error.message,
+      });
         }
     }
     async getTransactions(req: Request, res: Response) {
@@ -39,7 +41,9 @@ export class TransactionsController {
             res.status(200).send(transaction)
             
         }catch (error: any) {
-            res.status(500).send(error.message)
+      res.status(error.statusCode || 500).send({
+        message: error.message,
+      });
         }
 }
 async findTransactionByDate(req: Request, res: Response) {
@@ -55,7 +59,9 @@ async findTransactionByDate(req: Request, res: Response) {
         res.status(200).send(transactionByDate)
     
     }catch (error: any) {
-        res.status(400).send(error.message)
+      res.status(error.statusCode || 500).send({
+        message: error.message,
+      });
     }
 }
 }

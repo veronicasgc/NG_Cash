@@ -1,12 +1,8 @@
 import { TransactionsDatabase } from "../data/TransactionsDatabase";
 import { BaseError } from "../error/BaseError";
 import { MissingFields } from "../error/MissingFields";
-import { TransactionInputDTO, Transactions } from "../models/transactions";
-import { IdGenerator } from "../services/IdGenerator";
-import {
-  invalidAuthenticatorData,
-  invalidToken,
-} from "../error/AuthenticatorError";
+import { TransactionInputDTO } from "../models/transactions";
+import { invalidToken } from "../error/AuthenticatorError";
 import { Authenticator } from "../services/Authenticator";
 import {
   invalidTransaction,
@@ -99,7 +95,7 @@ export class TransactionsBusiness {
       }
 
       const authenticatorData = new Authenticator().getTokenData(token);
-     
+
       if (Number(authenticatorData.id) !== Number(id)) {
         throw new Error("Unauthorized access");
       }
@@ -127,9 +123,7 @@ export class TransactionsBusiness {
       }
 
       new Authenticator().getTokenData(token);
-      
 
-     
       if (!id || isNaN(id)) {
         throw new Error("Invalid or incomplete id");
       }
