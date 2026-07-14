@@ -17,15 +17,7 @@ jobs:
           node-version: 22
 
       - name: Instalar dependências
-        run: npm install
-        working-directory: backend
-
-      - name: Mostrar versões
-        run: |
-          node -v
-          npm -v
-          npx tsc -v
-          npm list @types/node
+        run: npm ci
         working-directory: backend
 
       - name: Compilar Projeto
