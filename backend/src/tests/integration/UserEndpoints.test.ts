@@ -62,7 +62,7 @@ describe("User - Signup", () => {
     expect(response.status).toBe(400);
     expect(response.body.message).toBe("This username is already registered");
   });
-   test.skip("Should return error when password without a capital letter", async () => {
+   test("Should return error when password without a capital letter", async () => {
     const response = await request(app).post("/user/signup").send({
       username: "Julia",
       password: "senha123",
@@ -73,7 +73,7 @@ describe("User - Signup", () => {
       "Invalid password! Must be at least 8 characters. A number and a capital letter",
     );  //BUG-005 - Password policy validation is incomplete during user signup
   });
-    test.skip("Should return error when password without a number", async () => {
+    test("Should return error when password without a number", async () => {
     const response = await request(app).post("/user/signup").send({
       username: "Julia",
       password: "Senhaaaa",

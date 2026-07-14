@@ -75,7 +75,7 @@ describe("TransactionsBusiness - Create Transaction", () => {
     expect(resultado).toEqual(input);
   });
 
-  test.skip("Should return error when token does not exist", async () => {
+  test("Should return error when token does not exist", async () => {
     const transactionsBusiness = new TransactionsBusiness();
     const input = {
       debitedaccountid: 2,
@@ -86,7 +86,7 @@ describe("TransactionsBusiness - Create Transaction", () => {
     const resultado = transactionsBusiness.createTransaction(input, "");
     await expect(resultado).rejects.toThrow(invalidToken);
   });
-  test.skip("Should return error when missing fields", async () => {
+  test("Should return error when missing fields", async () => {
     const transactionsBusiness = new TransactionsBusiness();
     const input = {
       debitedaccountid: 0,
@@ -100,7 +100,7 @@ describe("TransactionsBusiness - Create Transaction", () => {
     );
     await expect(resultado).rejects.toThrow(MissingFields);
   });
-  test.skip("Should return error when token is invalid", async () => {
+  test("Should return error when token is invalid", async () => {
     const transactionsBusiness = new TransactionsBusiness();
     const input = {
       debitedaccountid: 2,
@@ -187,7 +187,7 @@ describe("TransactionsBusiness - Create Transaction", () => {
     );
     await expect(resultado).rejects.toThrow("Invalid transaction value");
   });
-  test.skip("Should return error when currentBalance is bigger than transactionValue", async () => {
+  test("Should return error when currentBalance is bigger than transactionValue", async () => {
     jest
       .spyOn(AccountDatabase.prototype, "selectAccountById")
       .mockImplementation(async (id) => {
@@ -231,7 +231,7 @@ describe("TransactionsBusiness - Get Transaction", () => {
   afterEach(() => {
     jest.restoreAllMocks();
   });
-  test.skip("Should return error when token does not exist", async () => {
+  test("Should return error when token does not exist", async () => {
     const transactionsBusiness = new TransactionsBusiness();
     const userId = 1;
     const resultado = transactionsBusiness.getTrasaction(userId, "");
@@ -257,7 +257,7 @@ describe("TransactionsBusiness - Get Transaction", () => {
     const resultado = transactionsBusiness.getTrasaction(userId, "token-fake");
     await expect(resultado).rejects.toThrow("Unauthorized access");
   });
-  test.skip("Should return error when transaction does not exists", async () => {
+  test("Should return error when transaction does not exists", async () => {
     jest
       .spyOn(TransactionsDatabase.prototype, "getTransaction")
       .mockResolvedValue([]);
@@ -312,7 +312,7 @@ describe("Transactions Business - Find Transactions By Date", () => {
     jest.restoreAllMocks();
   });
 
-  test.skip("Should return error when token does not exist", async () => {
+  test("Should return error when token does not exist", async () => {
     const transactionsBusiness = new TransactionsBusiness();
 
     const resultado = transactionsBusiness.findTransactionByDate(
@@ -350,7 +350,7 @@ describe("Transactions Business - Find Transactions By Date", () => {
     );
   });
 
-  test.skip("Should return error when transaction does not exist", async () => {
+  test("Should return error when transaction does not exist", async () => {
     jest
       .spyOn(
         TransactionsDatabase.prototype,

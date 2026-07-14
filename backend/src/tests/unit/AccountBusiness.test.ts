@@ -34,7 +34,7 @@ describe("Account Business - Login", () => {
     expect(resultado).toBe("token-fake");
   });
 
-  test.skip("Should return error when username does not exist", async () => {
+  test("Should return error when username does not exist", async () => {
     const accountBusiness = new AccountBusiness();
     const input = {
       username: "",
@@ -44,7 +44,7 @@ describe("Account Business - Login", () => {
     await expect(resultado).rejects.toThrow(MissingFields);
   });
 
-  test.skip("Should return error when password is missing", async () => {
+  test("Should return error when password is missing", async () => {
     const accountBusiness = new AccountBusiness();
     const input = {
       username: "Veronica",
@@ -54,7 +54,7 @@ describe("Account Business - Login", () => {
     await expect(resultado).rejects.toThrow(MissingFields);
   });
 
-  test.skip("Should return error when username is invalid", async () => {
+  test("Should return error when username is invalid", async () => {
     const accountBusiness = new AccountBusiness();
     const input = {
       username: "Alexandra",
@@ -64,7 +64,7 @@ describe("Account Business - Login", () => {
     await expect(resultado).rejects.toThrow(invalidUser);
   });
 
-  test.skip("Should return error when password is invalid", async () => {
+  test("Should return error when password is invalid", async () => {
     const accountBusiness = new AccountBusiness();
     const input = {
       username: "Veronica",
@@ -103,13 +103,13 @@ describe("AccountBusiness - AccountById", () => {
     });
   });
 
-  test.skip("Should return error when token does not exist", async () => {
+  test("Should return error when token does not exist", async () => {
     const accountBusiness = new AccountBusiness();
 
     const resultado = accountBusiness.accountById(2, "");
     await expect(resultado).rejects.toThrow(invalidToken);
   });
-  test.skip("Should return error when account does not exist", async () => {
+  test("Should return error when account does not exist", async () => {
     jest
       .spyOn(AccountDatabase.prototype, "selectAccountById")
       .mockResolvedValue(undefined);
@@ -118,7 +118,7 @@ describe("AccountBusiness - AccountById", () => {
     const resultado = accountBusiness.accountById(1, "token-fake");
     await expect(resultado).rejects.toThrow(invalidAccount);
   });
-  test.skip("Should return error when token is invalid", async () => {
+  test("Should return error when token is invalid", async () => {
     jest
       .spyOn(Authenticator.prototype, "getTokenData")
       .mockImplementation((token) => {

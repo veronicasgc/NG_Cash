@@ -80,7 +80,7 @@ export class TransactionsBusiness {
 
       return transaction;
     } catch (error: any) {
-      throw new BaseError(error.statusCode || 500, error.message);
+      throw error
     }
   }
 
@@ -108,7 +108,7 @@ export class TransactionsBusiness {
 
       return transaction;
     } catch (error: any) {
-      throw new BaseError(error.statusCode, error.sqlMessage || error.message);
+      throw error
     }
   }
 
@@ -139,7 +139,7 @@ export class TransactionsBusiness {
 
       return transactionByDate;
     } catch (error: any) {
-      throw new BaseError(error.statusCode, error.sqlMessage || error.message);
+      throw error
     }
   }
 }

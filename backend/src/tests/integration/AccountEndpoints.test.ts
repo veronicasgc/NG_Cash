@@ -83,7 +83,7 @@ describe("Account - By ID", () => {
     expect(response.status).toBe(400);
     expect(response.body.message).toBe("Tokem needs to be passed in headers");
   });
-  test.skip("Should return error when token is invalid", async () => {
+  test("Should return error when token is invalid", async () => {
     const response = await request(app)
       .get("/account")
       .set("Authorization", "token-fake");

@@ -25,7 +25,7 @@ describe("Transactions - Create", () => {
     expect(response.status).toBe(201);
     expect(response.body.message).toBe("Transaction registered successfully!");
   });
-  test.skip("Should return error when token is invalid", async () => {
+  test("Should return error when token is invalid", async () => {
     const response = await request(app)
       .post("/transaction/add")
       .send({
@@ -51,7 +51,7 @@ describe("Transactions - Create", () => {
     expect(response.status).toBe(401);
     expect(response.body.message).toBe("Missing fields to complete");
   });
-  test.skip("Should return error when debited account does not exist", async () => {
+  test("Should return error when debited account does not exist", async () => {
     const response = await request(app)
       .post("/transaction/add")
       .send({
@@ -64,7 +64,7 @@ describe("Transactions - Create", () => {
     expect(response.status).toBe(400); //BUG-003 - Business Validation Errors Return HTTP 500
     expect(response.body.message).toBe("Debited account not found");
   });
-  test.skip("Should return error when credited account does not exist", async () => {
+  test("Should return error when credited account does not exist", async () => {
     const response = await request(app)
       .post("/transaction/add")
       .send({
@@ -99,7 +99,7 @@ describe("Transactions - Get",()=>{
          expect(response.status).toBe(200)
         
     });
-    test.skip("Should return error when id is invalid", async()=>{
+    test("Should return error when id is invalid", async()=>{
         const response = await request(app)
         .get("/transaction")
         .query({id : 1783367341})
@@ -107,7 +107,7 @@ describe("Transactions - Get",()=>{
         expect(response.status).toBe(400) //BUG-003 - Business Validation Errors Return HTTP 500
         expect(response.body.message).toBe("Unauthorized access")
     });
-    test.skip("Should return error when id does not exists", async()=>{
+    test("Should return error when id does not exists", async()=>{
         const response = await request(app)
         .get("/transaction")
         .query({id : ""})
@@ -139,7 +139,7 @@ describe("Transaction - FindByDate", ()=>{
         .set("Authorization", token)
         expect(response.status).toBe(200)
     });
-    test.skip("Should return error when date is invalid", async()=>{
+    test("Should return error when date is invalid", async()=>{
         const response = await request(app)
         .get("/transaction/date")
         .query({
@@ -150,7 +150,7 @@ describe("Transaction - FindByDate", ()=>{
         expect(response.status).toBe(400) //BUG-003 - Business Validation Errors Return HTTP 500
         expect(response.body.message).toBe("Date not validated")
     });
-    test.skip("Should return error when id does not exist or invalid", async()=>{
+    test("Should return error when id does not exist or invalid", async()=>{
         const response = await request(app)
         .get("/transaction/date")
         .query({

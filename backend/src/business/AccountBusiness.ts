@@ -42,7 +42,7 @@ export class AccountBusiness {
 
       return token;
     } catch (error: any) {
-      throw new BaseError(error.statusCode, error.sqlMessage || error.message);
+      throw error
     }
   }
   async accountById(id: number, token: string) {
@@ -61,7 +61,7 @@ export class AccountBusiness {
       }
       return account;
     } catch (error: any) {
-      throw new BaseError(error.statusCode, error.sqlMessage || error.message);
+      throw error
     }
   }
 }

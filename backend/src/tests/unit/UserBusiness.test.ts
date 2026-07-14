@@ -36,7 +36,7 @@ describe("UserBusiness - Signup", () => {
     jest.restoreAllMocks();
   });
 
-  test.skip("Should throw error when username is missing", async () => {
+  test("Should throw error when username is missing", async () => {
     const userBusiness = new UserBusiness();
 
     const input = {
@@ -46,7 +46,7 @@ describe("UserBusiness - Signup", () => {
 
     await expect(userBusiness.signup(input)).rejects.toThrow(MissingFields);
   });
-  test.skip("Should throw error when password is missing", async () => {
+  test("Should throw error when password is missing", async () => {
     const userBusiness = new UserBusiness();
     const input = {
       username: "Veronica",
@@ -67,7 +67,7 @@ describe("UserBusiness - Signup", () => {
     expect(resultado).toBe("token-fake");
   });
 
-   test.skip("Should throw error when username smaller than 3 characters", async () => {
+   test("Should throw error when username smaller than 3 characters", async () => {
     const userBusiness = new UserBusiness();
     const input = {
       username: "Ve",
@@ -76,7 +76,7 @@ describe("UserBusiness - Signup", () => {
     await expect(userBusiness.signup(input)).rejects.toThrow(invalidName);
   });
 
-   test.skip("Should throw error when password smaller than 8 characters", async () => {
+   test("Should throw error when password smaller than 8 characters", async () => {
     const userBusiness = new UserBusiness();
     const input = {
       username: "Veronica",

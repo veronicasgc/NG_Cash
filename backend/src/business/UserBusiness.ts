@@ -63,7 +63,7 @@ export class UserBusiness {
             return accessToken
 
         } catch (error: any) {
-            throw new BaseError(error.statusCode, error.sqlMessage || error.message);
+           throw error
         }
     }
     async getAllUsers(){
