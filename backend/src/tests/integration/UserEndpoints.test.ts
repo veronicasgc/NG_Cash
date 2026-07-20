@@ -22,7 +22,7 @@ describe("User - Signup", () => {
     });
 
     expect(response.status).toBe(401);
-    expect(response.body.message).toBe(MissingFields);
+    expect(response.body.message).toBe(new MissingFields().message);
   });
   test("Should return error when password is empty", async () => {
     const response = await request(app).post("/user/signup").send({
@@ -31,7 +31,7 @@ describe("User - Signup", () => {
     });
 
     expect(response.status).toBe(401);
-    expect(response.body.message).toBe(MissingFields);
+    expect(response.body.message).toBe(new MissingFields().message);
   });
   test("Should return error when password is less than 8 characters", async () => {
     const response = await request(app).post("/user/signup").send({
@@ -41,7 +41,7 @@ describe("User - Signup", () => {
 
     expect(response.status).toBe(400);
     expect(response.body.message).toBe(
-      invalidPassword
+      new invalidPassword().message
     );
   });
   test("Should return error when username is less than 3 characters", async () => {
@@ -52,7 +52,7 @@ describe("User - Signup", () => {
 
     expect(response.status).toBe(415);
     expect(response.body.message).toBe(
-      invalidName
+     new invalidName().message
     );
   });
   test("Should return error when username is already registered", async () => {
@@ -62,7 +62,7 @@ describe("User - Signup", () => {
     });
 
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe(invalidUserRegister);
+    expect(response.body.message).toBe(new invalidUserRegister().message);
   });
    test("Should return error when password without a capital letter", async () => {
     const response = await request(app).post("/user/signup").send({
@@ -72,7 +72,7 @@ describe("User - Signup", () => {
 
     expect(response.status).toBe(400);
     expect(response.body.message).toBe(
-      invalidPassword
+      new invalidPassword().message
     );  //BUG-005 - Password policy validation is incomplete during user signup
   });
     test("Should return error when password without a number", async () => {
@@ -83,7 +83,7 @@ describe("User - Signup", () => {
 
     expect(response.status).toBe(400);
     expect(response.body.message).toBe(
-      invalidPassword
+      new invalidPassword().message
     ); //BUG-005 - Password policy validation is incomplete during user signup
   });
 });

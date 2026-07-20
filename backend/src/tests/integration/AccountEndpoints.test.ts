@@ -23,7 +23,7 @@ describe("Account - Login", () => {
       password: "Senha123",
     });
     expect(response.status).toBe(401);
-    expect(response.body.message).toBe(MissingFields);
+    expect(response.body.message).toBe(new MissingFields().message);
   });
   test("Should return error when password does not exists", async () => {
     const response = await request(app).post("/account/login").send({
@@ -31,7 +31,7 @@ describe("Account - Login", () => {
       password: "",
     });
     expect(response.status).toBe(401);
-    expect(response.body.message).toBe("Missing fields to complete");
+    expect(response.body.message).toBe(new MissingFields().message);
   });
   test("Should return error when password is invalid", async () => {
     const response = await request(app).post("/account/login").send({
@@ -40,7 +40,7 @@ describe("Account - Login", () => {
     });
     expect(response.status).toBe(400);
     expect(response.body.message).toBe(
-      invalidPassword
+      new invalidPassword().message
     );
   });
   test("Should return when user not found", async () => {
@@ -49,7 +49,7 @@ describe("Account - Login", () => {
       password: "Senha123",
     });
     expect(response.status).toBe(404);
-    expect(response.body.message).toBe(invalidUser);
+    expect(response.body.message).toBe(new invalidUser().message);
   });
 });
 
@@ -78,20 +78,20 @@ describe("Account - By ID", () => {
       .query({ id: 4324 })
       .set("Authorization", token);
     expect(response.status).toBe(404);
-    expect(response.body.message).toBe(invalidAccount);
+    expect(response.body.message).toBe(new invalidAccount().message);
   });
   test("Should return error when token does not exist", async () => {
     const response = await request(app)
       .get("/account")
       .set("Authorization", "");
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe(invalidToken);
+    expect(response.body.message).toBe(new invalidToken().message);
   });
   test("Should return error when token is invalid", async () => {
     const response = await request(app)
       .get("/account")
       .set("Authorization", "token-fake");
     expect(response.status).toBe(400); //BUG-003 - Business Validation Errors Return HTTP 500
-    expect(response.body.message).toBe(invalidId);
+    expect(response.body.message).toBe(new invalidId().message);
   });
 });

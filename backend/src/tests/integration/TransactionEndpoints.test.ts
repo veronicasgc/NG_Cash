@@ -52,7 +52,7 @@ describe("Transactions - Create", () => {
       })
       .set("Authorization", token);
     expect(response.status).toBe(401);
-    expect(response.body.message).toBe(MissingFields);
+    expect(response.body.message).toBe(new MissingFields().message);
   });
   test("Should return error when debited account does not exist", async () => {
     const response = await request(app)
@@ -65,7 +65,7 @@ describe("Transactions - Create", () => {
       })
       .set("Authorization", token);
     expect(response.status).toBe(400); //BUG-003 - Business Validation Errors Return HTTP 500
-    expect(response.body.message).toBe(DebitedAccountInvalid);
+    expect(response.body.message).toBe(new DebitedAccountInvalid().message);
   });
   test("Should return error when credited account does not exist", async () => {
     const response = await request(app)
@@ -78,7 +78,7 @@ describe("Transactions - Create", () => {
       })
       .set("Authorization", token);
     expect(response.status).toBe(400); //BUG-003 - Business Validation Errors Return HTTP 500
-    expect(response.body.message).toBe(CreditedAccountInvalid);
+    expect(response.body.message).toBe(new CreditedAccountInvalid().message);
   });
  
 });
@@ -108,7 +108,7 @@ describe("Transactions - Get",()=>{
         .query({id : 1783367341})
         .set("Authorization", token)
         expect(response.status).toBe(400) //BUG-003 - Business Validation Errors Return HTTP 500
-        expect(response.body.message).toBe(invalidId)
+        expect(response.body.message).toBe(new invalidId().message)
     });
     test("Should return error when id does not exists", async()=>{
         const response = await request(app)
@@ -116,7 +116,7 @@ describe("Transactions - Get",()=>{
         .query({id : ""})
         .set("Authorization", token)
         expect(response.status).toBe(400) //BUG-003 - Business Validation Errors Return HTTP 500
-        expect(response.body.message).toBe(invalidId)
+        expect(response.body.message).toBe(new invalidId().message)
     });
     
 })
@@ -151,7 +151,7 @@ describe("Transaction - FindByDate", ()=>{
         })
         .set("Authorization", token)
         expect(response.status).toBe(400) //BUG-003 - Business Validation Errors Return HTTP 500
-        expect(response.body.message).toBe(InvalidDate)
+        expect(response.body.message).toBe(new InvalidDate().message)
     });
     test("Should return error when id does not exist or invalid", async()=>{
         const response = await request(app)
@@ -162,6 +162,6 @@ describe("Transaction - FindByDate", ()=>{
         })
         .set("Authorization", token)
         expect(response.status).toBe(400) //BUG-003 - Business Validation Errors Return HTTP 500
-        expect(response.body.message).toBe(invalidId)
+        expect(response.body.message).toBe(new invalidId().message)
     });
 })
