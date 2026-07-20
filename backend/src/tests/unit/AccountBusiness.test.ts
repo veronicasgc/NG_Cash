@@ -22,14 +22,14 @@ describe("Account Business - Login", () => {
     jest
       .spyOn(Authenticator.prototype, "generateToken")
       .mockReturnValue("token-fake");
-    
-    jest.spyOn(UserDatabase.prototype, "findUsername").mockResolvedValue({
-    id: 1,
-    username: "Veronica",
-    password: "hashFake"
-});
 
-jest.spyOn(HashManager.prototype, "compare").mockResolvedValue(true);
+    jest.spyOn(UserDatabase.prototype, "findUsername").mockResolvedValue({
+      id: 1,
+      username: "Veronica",
+      password: "hashFake",
+    });
+
+    jest.spyOn(HashManager.prototype, "compare").mockResolvedValue(true);
   });
   afterEach(() => {
     jest.restoreAllMocks();
@@ -45,6 +45,7 @@ jest.spyOn(HashManager.prototype, "compare").mockResolvedValue(true);
   });
 
   test("Should return error when username does not exist", async () => {
+   
     const accountBusiness = new AccountBusiness();
     const input = {
       username: "",
@@ -65,6 +66,12 @@ jest.spyOn(HashManager.prototype, "compare").mockResolvedValue(true);
   });
 
   test("Should return error when username is invalid", async () => {
+     
+      jest
+        .spyOn(UserDatabase.prototype, "findUsername")
+        .mockResolvedValue(undefined);
+
+    
     const accountBusiness = new AccountBusiness();
     const input = {
       username: "Alexandra",
@@ -75,6 +82,9 @@ jest.spyOn(HashManager.prototype, "compare").mockResolvedValue(true);
   });
 
   test("Should return error when password is invalid", async () => {
+    jest
+  .spyOn(HashManager.prototype, "compare")
+  .mockResolvedValue(false);
     const accountBusiness = new AccountBusiness();
     const input = {
       username: "Veronica",
