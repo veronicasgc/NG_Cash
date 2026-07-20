@@ -13,6 +13,8 @@ import { invalidPassword, invalidUser } from "../../error/UserError";
 import { AccountDatabase } from "../../data/AccountDatabase";
 import { invalidToken } from "../../error/AuthenticatorError";
 import { invalidAccount } from "../../error/AccountError";
+import { UserDatabase } from "../../data/UserDatabase";
+import { HashManager } from "../../services/HashManager";
 
 //login
 describe("Account Business - Login", () => {
@@ -20,6 +22,14 @@ describe("Account Business - Login", () => {
     jest
       .spyOn(Authenticator.prototype, "generateToken")
       .mockReturnValue("token-fake");
+    
+    jest.spyOn(UserDatabase.prototype, "findUsername").mockResolvedValue({
+    id: 1,
+    username: "Veronica",
+    password: "hashFake"
+});
+
+jest.spyOn(HashManager.prototype, "compare").mockResolvedValue(true);
   });
   afterEach(() => {
     jest.restoreAllMocks();
