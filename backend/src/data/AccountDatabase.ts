@@ -6,7 +6,7 @@ export class AccountDatabase extends BaseDatabase {
     private static TABLE_NAME = "accounts"
 
     async createAccount(account: AccountInputDTO): Promise<any> {
-        try {  
+       
             await AccountDatabase.connection
             .insert({
                 id: account.id,
@@ -14,12 +14,10 @@ export class AccountDatabase extends BaseDatabase {
             })
             .into(AccountDatabase.TABLE_NAME)
 
-        } catch (error: any) {
-            throw new BaseError(error.statusCode, error.sqlMessage || error.message)
-        }
+        
     }
     async selectAccountById(id: number): Promise<any>{
-        try{
+    
             const [account] = await AccountDatabase.connection
                 .select("id", "balance")
                 .where({id})
@@ -27,21 +25,17 @@ export class AccountDatabase extends BaseDatabase {
 
                 return account
 
-        } catch(error: any){
-            throw new BaseError(error.statusCode, error.sqlMessage || error.message)
-        }
+       
     }
 
     async updateBalance(id: number, newBalance: number): Promise<void> {
-        try {
+      
     await AccountDatabase.connection
       .update({ balance: newBalance })
       .where({ id })
       .into(AccountDatabase.TABLE_NAME)
 
-  } catch (error: any) {
-    throw new BaseError(error.statusCode, error.sqlMessage || error.message)
-  }
+ 
 }
 
    

@@ -1,18 +1,19 @@
 import { TransactionsDatabase } from "../data/TransactionsDatabase";
-import { BaseError } from "../error/BaseError";
 import { MissingFields } from "../error/MissingFields";
 import { TransactionInputDTO } from "../models/transactions";
-import { invalidToken } from "../error/AuthenticatorError";
+import { invalidToken, invalidId } from "../error/AuthenticatorError";
 import { Authenticator } from "../services/Authenticator";
 import {
-  invalidTransaction,
+  InvalidTransaction,
   InsufficientFunds,
+  DebitedAccountInvalid,
+  CreditedAccountInvalid, InvalidValue, InvalidBalance, InvalidDate
 } from "../error/TransactionError";
 import { AccountDatabase } from "../data/AccountDatabase";
 
 export class TransactionsBusiness {
   async createTransaction(input: TransactionInputDTO, token: string) {
-    try {
+    
       const { debitedaccountid, creditedaccountid, value, createdat } = input;
 
       if (!token) {
@@ -31,14 +32,14 @@ export class TransactionsBusiness {
         await accountDatabase.selectAccountById(debitedaccountid);
 
       if (!debitedAccount) {
-        throw new Error("Debited account not found");
+        throw new DebitedAccountInvalid();
       }
 
       const creditedAccount =
         await accountDatabase.selectAccountById(creditedaccountid);
 
       if (!creditedAccount) {
-        throw new Error("Credited account not found");
+        throw new CreditedAccountInvalid();
       }
 
       const currentBalance = Number(debitedAccount.balance);
@@ -46,11 +47,11 @@ export class TransactionsBusiness {
       const transactionValue = Number(value);
 
       if (isNaN(currentBalance) || isNaN(creditedBalance)) {
-        throw new Error("Invalid stored balance");
+        throw new InvalidBalance();
       }
 
       if (isNaN(transactionValue) || transactionValue <= 0) {
-        throw new Error("Invalid transaction value");
+        throw new InvalidValue();
       }
 
       if (currentBalance < transactionValue) {
@@ -79,53 +80,49 @@ export class TransactionsBusiness {
       await transactionDatabase.insertTransaction(transaction);
 
       return transaction;
-    } catch (error: any) {
-      throw error
-    }
+   
   }
 
   async getTrasaction(id: number, token: string) {
-    try {
+   
       if (!token) {
         throw new invalidToken();
       }
 
       if (!id || isNaN(id)) {
-        throw new Error("Invalid or incomplete id");
+        throw new invalidId();
       }
 
       const authenticatorData = new Authenticator().getTokenData(token);
 
       if (Number(authenticatorData.id) !== Number(id)) {
-        throw new Error("Unauthorized access");
+        throw new invalidId();
       }
       const trasactionDatabase = new TransactionsDatabase();
       const transaction = await trasactionDatabase.getTransaction(id);
 
       if (!transaction || transaction.length === 0) {
-        throw new invalidTransaction();
+        throw new InvalidTransaction();
       }
 
       return transaction;
-    } catch (error: any) {
-      throw error
-    }
+   
   }
 
   async findTransactionByDate(createdat: string, token: string, id: number) {
-    try {
+    
       if (!token) {
         throw new invalidToken();
       }
 
       if (!createdat) {
-        throw new Error("Date not validated");
+        throw new InvalidDate();
       }
 
       new Authenticator().getTokenData(token);
 
       if (!id || isNaN(id)) {
-        throw new Error("Invalid or incomplete id");
+        throw new invalidId();
       }
       const trasactionDatabase = new TransactionsDatabase();
       const transactionByDate = await trasactionDatabase.findTransactionByDate(
@@ -134,12 +131,10 @@ export class TransactionsBusiness {
       );
 
       if (!transactionByDate || transactionByDate.length === 0) {
-        throw new invalidTransaction();
+        throw new InvalidTransaction();
       }
 
       return transactionByDate;
-    } catch (error: any) {
-      throw error
-    }
+   
   }
 }

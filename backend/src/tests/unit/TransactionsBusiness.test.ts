@@ -10,14 +10,19 @@ import {
 import { TransactionsDatabase } from "../../data/TransactionsDatabase";
 import { AccountDatabase } from "../../data/AccountDatabase";
 import { Authenticator } from "../../services/Authenticator";
-import { invalidToken } from "../../error/AuthenticatorError";
+import { invalidId, invalidToken } from "../../error/AuthenticatorError";
 import { MissingFields } from "../../error/MissingFields";
-import { TransactionInputDTO } from "../../models/transactions";
 import {
+  CreditedAccountInvalid,
+  DebitedAccountInvalid,
   InsufficientFunds,
-  invalidTransaction,
+  InvalidBalance,
+  InvalidDate,
+  InvalidTransaction,
+  InvalidValue,
 } from "../../error/TransactionError";
 import { BaseError } from "../../error/BaseError";
+import { invalid } from "moment";
 
 //createTansaction
 
@@ -126,7 +131,7 @@ describe("TransactionsBusiness - Create Transaction", () => {
       input,
       "token-fake",
     );
-    await expect(resultado).rejects.toThrow("Debited account not found");
+    await expect(resultado).rejects.toThrow(DebitedAccountInvalid);
   });
   test("Should return error when creditedaccountid is invalid", async () => {
     const transactionsBusiness = new TransactionsBusiness();
@@ -140,7 +145,7 @@ describe("TransactionsBusiness - Create Transaction", () => {
       input,
       "token-fake",
     );
-    await expect(resultado).rejects.toThrow("Credited account not found");
+    await expect(resultado).rejects.toThrow(CreditedAccountInvalid);
   });
   test("Should return error when balance is not a number", async () => {
     jest
@@ -171,7 +176,7 @@ describe("TransactionsBusiness - Create Transaction", () => {
       input,
       "token-fake",
     );
-    await expect(resultado).rejects.toThrow("Invalid stored balance");
+    await expect(resultado).rejects.toThrow(InvalidBalance);
   });
   test("Should return error when transactionValue is not a number", async () => {
     const transactionsBusiness = new TransactionsBusiness();
@@ -185,7 +190,7 @@ describe("TransactionsBusiness - Create Transaction", () => {
       input,
       "token-fake",
     );
-    await expect(resultado).rejects.toThrow("Invalid transaction value");
+    await expect(resultado).rejects.toThrow(InvalidValue);
   });
   test("Should return error when currentBalance is bigger than transactionValue", async () => {
     jest
@@ -241,7 +246,7 @@ describe("TransactionsBusiness - Get Transaction", () => {
     const transactionsBusiness = new TransactionsBusiness();
     const userId = NaN;
     const resultado = transactionsBusiness.getTrasaction(userId, "token-fake");
-    await expect(resultado).rejects.toThrow("Invalid or incomplete id");
+    await expect(resultado).rejects.toThrow(invalidId);
   });
   test("Should return error when token id differs from user id", async () => {
     jest
@@ -255,7 +260,7 @@ describe("TransactionsBusiness - Get Transaction", () => {
     const transactionsBusiness = new TransactionsBusiness();
     const userId = 1;
     const resultado = transactionsBusiness.getTrasaction(userId, "token-fake");
-    await expect(resultado).rejects.toThrow("Unauthorized access");
+    await expect(resultado).rejects.toThrow(invalidId);
   });
   test("Should return error when transaction does not exists", async () => {
     jest
@@ -263,7 +268,7 @@ describe("TransactionsBusiness - Get Transaction", () => {
       .mockResolvedValue([]);
     const transactionsBusiness = new TransactionsBusiness();
     const resultado = transactionsBusiness.getTrasaction(1, "token-fake");
-    await expect(resultado).rejects.toThrow(invalidTransaction);
+    await expect(resultado).rejects.toThrow(InvalidTransaction);
   });
   test("Should return transactions", async () => {
     jest
@@ -333,7 +338,7 @@ describe("Transactions Business - Find Transactions By Date", () => {
       1
     );
 
-    await expect(resultado).rejects.toThrow("Date not validated");
+    await expect(resultado).rejects.toThrow(InvalidDate);
   });
 
   test("Should return error when id is invalid", async () => {
@@ -346,7 +351,7 @@ describe("Transactions Business - Find Transactions By Date", () => {
     );
 
     await expect(resultado).rejects.toThrow(
-      "Invalid or incomplete id"
+      invalidId
     );
   });
 
@@ -367,7 +372,7 @@ describe("Transactions Business - Find Transactions By Date", () => {
     );
 
     await expect(resultado).rejects.toThrow(
-      invalidTransaction
+      InvalidTransaction
     );
   });
 

@@ -1,6 +1,7 @@
 import * as jwt from "jsonwebtoken";
 import { AuthenticationData } from "../models/user";
 import dotenv from "dotenv"
+import { invalidToken } from "../error/AuthenticatorError";
 
 dotenv.config()
 
@@ -13,11 +14,16 @@ export class Authenticator {
     return token;
   };
 
-  public getTokenData  (token: any): AuthenticationData  {
+  public getTokenData  (token: string): AuthenticationData  {
+    try {
+      const payload = jwt.verify(token, process.env.JWT_KEY as string) as jwt.JwtPayload;
 
-    const payload = jwt.verify(token, process.env.JWT_KEY as any) as jwt.JwtPayload
-    const result: AuthenticationData = { id: payload.id }
-
-    return result
+      return {
+        id: payload.id,
+      };
+    } catch {
+      throw new invalidToken();
+    }
   }
 }
+                                                  

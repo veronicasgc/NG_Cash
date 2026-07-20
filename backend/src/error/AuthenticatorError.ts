@@ -11,3 +11,9 @@ export class invalidToken extends BaseError {
         super(400, "Tokem needs to be passed in headers")
     }
 }
+
+export class invalidId extends BaseError{
+    constructor(){
+        super(400, "Invalid or incomplete id")
+    }
+}

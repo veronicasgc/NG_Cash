@@ -14,7 +14,7 @@ import { invalidAccount } from "../error/AccountError";
 
 export class AccountBusiness {
   async loginAccount(login: LoginAccount) {
-    try {
+  
       const { username, password } = login;
 
       if (!username || !password) {
@@ -41,12 +41,10 @@ export class AccountBusiness {
       const token = authenticator.generateToken({ id: user.id });
 
       return token;
-    } catch (error: any) {
-      throw error
-    }
+    
   }
   async accountById(id: number, token: string) {
-    try {
+  
       if (!token) {
         throw new invalidToken();
       }
@@ -60,8 +58,6 @@ export class AccountBusiness {
         throw new invalidAccount();
       }
       return account;
-    } catch (error: any) {
-      throw error
-    }
+    
   }
 }

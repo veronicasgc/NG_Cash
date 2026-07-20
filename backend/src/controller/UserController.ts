@@ -22,7 +22,7 @@ export class UserController {
       });
     } catch (error: any) {
       res.status(error.statusCode || 500).send({
-        message: error.message,
+        message: error.message
       });
     }
   }
@@ -34,7 +34,9 @@ export class UserController {
 
       res.status(200).send(users);
     } catch (error: any) {
-      res.status(400).send(error.message);
+      res.status(error.statusCode || 500).send({
+        message: error.message
+      });
     }
   }
  

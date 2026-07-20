@@ -6,17 +6,15 @@ export class UserDatabase extends BaseDatabase {
     private static TABLE_NAME = "users"
 
     async signup(user: User) {
-        try {
+       
             await UserDatabase.connection
             .insert(user)
             .into(UserDatabase.TABLE_NAME)
 
-        } catch (error: any) {
-            throw new BaseError(error.statusCode, error.sqlMessage || error.message)
-        }
+      
     }
     async findUsername(username: string) {
-        try {
+      
             const user = await UserDatabase.connection
                 .select()
                 .where({username})
@@ -24,9 +22,7 @@ export class UserDatabase extends BaseDatabase {
 
                 return user[0]
 
-        } catch (error: any) {
-            throw new BaseError(error.statusCode, error.sqlMessage || error.message)
-        }
+       
     }
     async getAllUsers(){
         const users = await UserDatabase.connection(UserDatabase.TABLE_NAME).select("id", "username", "accountid")
@@ -34,7 +30,7 @@ export class UserDatabase extends BaseDatabase {
         
     }
     async transferUsername(username: string) {
-        try {
+       
             const user = await UserDatabase.connection
                 .select()
                 .where({username})
@@ -44,9 +40,6 @@ export class UserDatabase extends BaseDatabase {
 
                 return user[0]
 
-        } catch (error: any) {
-            throw new BaseError(error.statusCode, error.sqlMessage || error.message)
-        }
     }
   
 }

@@ -7,19 +7,17 @@ export class TransactionsDatabase extends BaseDatabase {
 
     private static TABLE_NAME = "transactions"
     async insertTransaction(transaction: TransactionInputDTO): Promise<void> {
-  try {
+
     await TransactionsDatabase.connection
       .insert(transaction)
       .into(TransactionsDatabase.TABLE_NAME)
 
-  } catch (error: any) {
-    throw new BaseError(error.statusCode, error.sqlMessage || error.message)
-  }
+ 
 }
 
 
     async getTransaction(id: number) {
-        try {
+        
             const result = await TransactionsDatabase.connection
                 .select('debitedaccountid',
                     'creditedaccountid as receiver',
@@ -33,13 +31,11 @@ export class TransactionsDatabase extends BaseDatabase {
 
             return result
 
-        } catch (error: any) {
-            throw new BaseError(error.statusCode, error.sqlMessage || error.message)
-        }
+       
 
     }
     async findTransactionByDate(createdat: string, id: number) {
-  try {
+ 
 
     const result = await TransactionsDatabase.connection
       .select(
@@ -59,11 +55,6 @@ export class TransactionsDatabase extends BaseDatabase {
 
     return result;
 
-  } catch (error: any) {
-    throw new BaseError(
-      error.statusCode || 400,
-      error.sqlMessage || error.message
-    );
-  }
+
 }
 }

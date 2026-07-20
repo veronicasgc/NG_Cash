@@ -11,7 +11,7 @@ import { AccountInputDTO } from "../models/account";
 
 export class UserBusiness {
     async signup(signup: SignupInputDTO) {
-        try {
+      
             const { username, password } = signup;
 
             if (!username || !password) {
@@ -62,9 +62,7 @@ export class UserBusiness {
           
             return accessToken
 
-        } catch (error: any) {
-           throw error
-        }
+         
     }
     async getAllUsers(){
         const userDatabase = new UserDatabase()

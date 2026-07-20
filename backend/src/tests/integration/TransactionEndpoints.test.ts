@@ -1,6 +1,9 @@
 import request from "supertest";
 import { app } from "../../app";
 import { describe, test, expect, beforeEach } from "@jest/globals";
+import { invalidId, invalidToken } from "../../error/AuthenticatorError";
+import { MissingFields } from "../../error/MissingFields";
+import { CreditedAccountInvalid, DebitedAccountInvalid, InvalidDate } from "../../error/TransactionError";
 
 //createTransaction
 describe("Transactions - Create", () => {
@@ -36,7 +39,7 @@ describe("Transactions - Create", () => {
       })
       .set("Authorization", "token-fake");
     expect(response.status).toBe(400); //BUG-003 - Business Validation Errors Return HTTP 500
-    expect(response.body.message).toBe("Tokem needs to be passed in headers");
+    expect(response.body.message).toBe(new invalidToken().message);
   });
   test("Should return error when missing fields", async () => {
     const response = await request(app)
@@ -49,7 +52,7 @@ describe("Transactions - Create", () => {
       })
       .set("Authorization", token);
     expect(response.status).toBe(401);
-    expect(response.body.message).toBe("Missing fields to complete");
+    expect(response.body.message).toBe(MissingFields);
   });
   test("Should return error when debited account does not exist", async () => {
     const response = await request(app)
@@ -62,7 +65,7 @@ describe("Transactions - Create", () => {
       })
       .set("Authorization", token);
     expect(response.status).toBe(400); //BUG-003 - Business Validation Errors Return HTTP 500
-    expect(response.body.message).toBe("Debited account not found");
+    expect(response.body.message).toBe(DebitedAccountInvalid);
   });
   test("Should return error when credited account does not exist", async () => {
     const response = await request(app)
@@ -75,7 +78,7 @@ describe("Transactions - Create", () => {
       })
       .set("Authorization", token);
     expect(response.status).toBe(400); //BUG-003 - Business Validation Errors Return HTTP 500
-    expect(response.body.message).toBe("Credited account not found");
+    expect(response.body.message).toBe(CreditedAccountInvalid);
   });
  
 });
@@ -105,7 +108,7 @@ describe("Transactions - Get",()=>{
         .query({id : 1783367341})
         .set("Authorization", token)
         expect(response.status).toBe(400) //BUG-003 - Business Validation Errors Return HTTP 500
-        expect(response.body.message).toBe("Unauthorized access")
+        expect(response.body.message).toBe(invalidId)
     });
     test("Should return error when id does not exists", async()=>{
         const response = await request(app)
@@ -113,7 +116,7 @@ describe("Transactions - Get",()=>{
         .query({id : ""})
         .set("Authorization", token)
         expect(response.status).toBe(400) //BUG-003 - Business Validation Errors Return HTTP 500
-        expect(response.body.message).toBe("Invalid or incomplete id")
+        expect(response.body.message).toBe(invalidId)
     });
     
 })
@@ -148,7 +151,7 @@ describe("Transaction - FindByDate", ()=>{
         })
         .set("Authorization", token)
         expect(response.status).toBe(400) //BUG-003 - Business Validation Errors Return HTTP 500
-        expect(response.body.message).toBe("Date not validated")
+        expect(response.body.message).toBe(InvalidDate)
     });
     test("Should return error when id does not exist or invalid", async()=>{
         const response = await request(app)
@@ -159,6 +162,6 @@ describe("Transaction - FindByDate", ()=>{
         })
         .set("Authorization", token)
         expect(response.status).toBe(400) //BUG-003 - Business Validation Errors Return HTTP 500
-        expect(response.body.message).toBe("Invalid or incomplete id")
+        expect(response.body.message).toBe(invalidId)
     });
 })

@@ -1,6 +1,8 @@
 import request from "supertest";
 import { app } from "../../app";
 import { describe, expect, test } from "@jest/globals";
+import { invalidName, invalidPassword, invalidUserRegister } from "../../error/UserError";
+import { MissingFields } from "../../error/MissingFields";
 
 //signup
 describe("User - Signup", () => {
@@ -20,7 +22,7 @@ describe("User - Signup", () => {
     });
 
     expect(response.status).toBe(401);
-    expect(response.body.message).toBe("Missing fields to complete");
+    expect(response.body.message).toBe(MissingFields);
   });
   test("Should return error when password is empty", async () => {
     const response = await request(app).post("/user/signup").send({
@@ -29,7 +31,7 @@ describe("User - Signup", () => {
     });
 
     expect(response.status).toBe(401);
-    expect(response.body.message).toBe("Missing fields to complete");
+    expect(response.body.message).toBe(MissingFields);
   });
   test("Should return error when password is less than 8 characters", async () => {
     const response = await request(app).post("/user/signup").send({
@@ -39,7 +41,7 @@ describe("User - Signup", () => {
 
     expect(response.status).toBe(400);
     expect(response.body.message).toBe(
-      "Invalid password! Must be at least 8 characters. A number and a capital letter",
+      invalidPassword
     );
   });
   test("Should return error when username is less than 3 characters", async () => {
@@ -50,7 +52,7 @@ describe("User - Signup", () => {
 
     expect(response.status).toBe(415);
     expect(response.body.message).toBe(
-      "Invalid username! Must be at least 3 characters",
+      invalidName
     );
   });
   test("Should return error when username is already registered", async () => {
@@ -60,7 +62,7 @@ describe("User - Signup", () => {
     });
 
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe("This username is already registered");
+    expect(response.body.message).toBe(invalidUserRegister);
   });
    test("Should return error when password without a capital letter", async () => {
     const response = await request(app).post("/user/signup").send({
@@ -70,7 +72,7 @@ describe("User - Signup", () => {
 
     expect(response.status).toBe(400);
     expect(response.body.message).toBe(
-      "Invalid password! Must be at least 8 characters. A number and a capital letter",
+      invalidPassword
     );  //BUG-005 - Password policy validation is incomplete during user signup
   });
     test("Should return error when password without a number", async () => {
@@ -81,7 +83,7 @@ describe("User - Signup", () => {
 
     expect(response.status).toBe(400);
     expect(response.body.message).toBe(
-      "Invalid password! Must be at least 8 characters. A number and a capital letter",
+      invalidPassword
     ); //BUG-005 - Password policy validation is incomplete during user signup
   });
 });
