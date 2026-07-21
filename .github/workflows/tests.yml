@@ -6,6 +6,27 @@ on:
 jobs:
   executar_testes:
     runs-on: ubuntu-latest
+    env:
+      DB_HOSTNAME: localhost
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres123
+      DB_DATABASE: ng_cash
+      JWT_KEY: ngcash_secret_key_123
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres123
+          POSTGRES_DB: ng_cash
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
 
     steps:
       - name: Checkout do código
@@ -20,12 +41,21 @@ jobs:
         run: npm ci
         working-directory: backend
 
+      - name: Testes Unitários
+        run: npm run test:unit
+        working-directory: backend
+
       - name: Compilar Projeto
         run: npm run build
         working-directory: backend
 
-      - name: Testes Unitários
-        run: npm run test:unit
+      - name: Criar tabelas do banco
+        run: |
+          PGPASSWORD=postgres123 psql \
+            -h localhost \
+            -U postgres \
+            -d ng_cash \
+            -f src/queries.sql
         working-directory: backend
 
       - name: Testes de Integração
