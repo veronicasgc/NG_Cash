@@ -92,6 +92,6 @@ describe("Account - By ID", () => {
       .get("/account")
       .set("Authorization", "token-fake");
     expect(response.status).toBe(400); //BUG-003 - Business Validation Errors Return HTTP 500
-    expect(response.body.message).toBe(new invalidId().message);
+    expect(response.body.message).toBe(new invalidToken().message);
   });
 });

@@ -55,7 +55,7 @@ async findTransactionByDate(req: Request, res: Response) {
         const transactionsBusiness = new TransactionsBusiness()
         const transactionByDate = await transactionsBusiness.findTransactionByDate(createdat, token, id)
         
-        console.log(createdat)
+      
         res.status(200).send(transactionByDate)
     
     }catch (error: any) {
