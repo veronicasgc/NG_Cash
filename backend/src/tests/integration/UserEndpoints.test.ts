@@ -7,6 +7,7 @@ import {
   invalidUserRegister,
 } from "../../error/UserError";
 import { MissingFields } from "../../error/MissingFields";
+import { createTestUser } from "../helpers/createTestUser";
 
 //signup
 describe("User - Signup", () => {
@@ -17,7 +18,7 @@ describe("User - Signup", () => {
       username,
       password: "Senha123",
     });
-    
+
     expect(response.status).toBe(200);
     expect(response.body.message).toBe("Successfully registered user!");
     expect(typeof response.body.token).toBe("string");
@@ -59,8 +60,10 @@ describe("User - Signup", () => {
     expect(response.body.message).toBe(new invalidName().message);
   });
   test("Should return error when username is already registered", async () => {
+    const user = await createTestUser();
+
     const response = await request(app).post("/user/signup").send({
-      username: "Veronica",
+      username: user.username,
       password: "Senha123",
     });
 

@@ -22,9 +22,14 @@ export const createTestUser = async () => {
 
   const user = await userDatabase.findByUsername(username);
 
+  if (!user) {
+    throw new Error("Usuário de teste não foi criado.");
+  }
+
   return {
     token,
     username,
+    password,
     userId: user!.id,
     accountId: user!.accountid,
   };

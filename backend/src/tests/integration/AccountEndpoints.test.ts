@@ -9,17 +9,13 @@ import { createTestUser } from "../helpers/createTestUser";
 //login
 describe("Account - Login", () => {
   test("Should login successfully", async () => {
-    const username = `teste_${Date.now()}`;
-
-    await request(app).post("/user/signup").send({
-      username,
-      password: "Senha123",
-    });
+    const user = await createTestUser();
 
     const response = await request(app).post("/account/login").send({
-      username,
-      password: "Senha123",
+      username: user.username,
+      password: user.password,
     });
+
     expect(response.status).toBe(200);
     expect(typeof response.body.token).toBe("string");
   });
@@ -40,8 +36,10 @@ describe("Account - Login", () => {
     expect(response.body.message).toBe(new MissingFields().message);
   });
   test("Should return error when password is invalid", async () => {
+    const user = await createTestUser();
+
     const response = await request(app).post("/account/login").send({
-      username: "Manoel",
+      username: user.username,
       password: "Senha12",
     });
     expect(response.status).toBe(400);
