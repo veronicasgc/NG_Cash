@@ -10,31 +10,40 @@ import {
   InvalidDate,
 } from "../../error/TransactionError";
 import { AccountDatabase } from "../../data/AccountDatabase";
+import { createTestUser } from "../helpers/createTestUser";
+import { createTestTransaction } from "../helpers/createTestTransaction";
 
 //createTransaction
 describe("Transactions - Create", () => {
   let token: string;
+  let senderAccountId: number;
+  let receiverAccountId: number;
+  let today: string;
   const accountDatabase = new AccountDatabase();
   beforeEach(async () => {
-    await accountDatabase.updateBalance(1783367341294, 10000);
-    await accountDatabase.updateBalance(1783031061142, 10000);
-    const login = await request(app).post("/account/login").send({
-      username: "Manoel",
-      password: "Senha123",
-    });
-    token = login.body.token;
+    const sender = await createTestUser();
+    const receiver = await createTestUser();
+    token = sender.token;
+
+    senderAccountId = sender.accountId;
+    receiverAccountId = receiver.accountId;
+    await accountDatabase.updateBalance(senderAccountId, 10000);
+
+    await accountDatabase.updateBalance(receiverAccountId, 10000);
+    today = new Date().toISOString().split("T")[0];
   });
+
   test("Should do transfer successfully", async () => {
     const response = await request(app)
       .post("/transaction/add")
       .send({
-        debitedaccountid: 1783367341294,
-        creditedaccountid: 1783031061142,
+        debitedaccountid: senderAccountId,
+        creditedaccountid: receiverAccountId,
         value: 10,
-        createdat: new Date("10/07/2026"),
+        createdat: today,
       })
       .set("Authorization", token);
-   
+
     expect(response.status).toBe(201);
     expect(response.body.message).toBe("Transaction registered successfully!");
   });
@@ -42,10 +51,10 @@ describe("Transactions - Create", () => {
     const response = await request(app)
       .post("/transaction/add")
       .send({
-        debitedaccountid: 1783367341294,
-        creditedaccountid: 1783031061142,
+        debitedaccountid: senderAccountId,
+        creditedaccountid: receiverAccountId,
         value: 20,
-        createdat: new Date("10/07/2026"),
+        createdat: today,
       })
       .set("Authorization", "token-fake");
     expect(response.status).toBe(400); //BUG-003 - Business Validation Errors Return HTTP 500
@@ -55,8 +64,8 @@ describe("Transactions - Create", () => {
     const response = await request(app)
       .post("/transaction/add")
       .send({
-        debitedaccountid: 1783367341294,
-        creditedaccountid: 1783031061142,
+        debitedaccountid: senderAccountId,
+        creditedaccountid: receiverAccountId,
         value: 20,
         createdat: "",
       })
@@ -69,9 +78,9 @@ describe("Transactions - Create", () => {
       .post("/transaction/add")
       .send({
         debitedaccountid: 178336734112,
-        creditedaccountid: 1783031061142,
+        creditedaccountid: receiverAccountId,
         value: 20,
-        createdat: new Date("10/07/2026"),
+        createdat: today,
       })
       .set("Authorization", token);
     expect(response.status).toBe(404); //BUG-003 - Business Validation Errors Return HTTP 500
@@ -81,25 +90,25 @@ describe("Transactions - Create", () => {
     const response = await request(app)
       .post("/transaction/add")
       .send({
-        debitedaccountid: 1783367341294,
+        debitedaccountid: senderAccountId,
         creditedaccountid: 1783031061543,
         value: 20,
-        createdat: new Date("10/07/2026"),
+        createdat: today,
       })
       .set("Authorization", token);
     expect(response.status).toBe(404); //BUG-003 - Business Validation Errors Return HTTP 500
     expect(response.body.message).toBe(new CreditedAccountInvalid().message);
   });
   test("Should return insufficient funds", async () => {
-    await accountDatabase.updateBalance(1783367341294, 5);
+    await accountDatabase.updateBalance(senderAccountId, 5);
 
     const response = await request(app)
       .post("/transaction/add")
       .send({
-        debitedaccountid: 1783367341294,
-        creditedaccountid: 1783031061142,
+        debitedaccountid: senderAccountId,
+        creditedaccountid: receiverAccountId,
         value: 10,
-        createdat: new Date("10/07/2026"),
+        createdat: today,
       })
       .set("Authorization", token);
 
@@ -112,17 +121,19 @@ describe("Transactions - Create", () => {
 
 describe("Transactions - Get", () => {
   let token: string;
+  let accountId: number;
+  let createdAt: string;
   beforeEach(async () => {
-    const login = await request(app).post("/account/login").send({
-      username: "Manoel",
-      password: "Senha123",
-    });
-    token = login.body.token;
+    const transaction = await createTestTransaction();
+
+    token = transaction.token;
+    accountId = transaction.senderAccountId;
+    createdAt = transaction.createdAt;
   });
   test("Should return all transactions user", async () => {
     const response = await request(app)
       .get("/transaction")
-      .query({ id: 1783367341294 })
+      .query({ id: accountId })
       .set("Authorization", token);
     expect(response.status).toBe(200);
   });
@@ -148,19 +159,22 @@ describe("Transactions - Get", () => {
 
 describe("Transaction - FindByDate", () => {
   let token: string;
+  let accountId: number;
+  let createdAt: string;
+
   beforeEach(async () => {
-    const login = await request(app).post("/account/login").send({
-      username: "Manoel",
-      password: "Senha123",
-    });
-    token = login.body.token;
+    const transaction = await createTestTransaction();
+
+    token = transaction.token;
+    accountId = transaction.senderAccountId;
+    createdAt = transaction.createdAt;
   });
   test("Should find transaction by date", async () => {
     const response = await request(app)
       .get("/transaction/date")
       .query({
-        id: 1783367341294,
-        createdat: "2026/07/10",
+        id: accountId,
+        createdat: createdAt,
       })
       .set("Authorization", token);
     expect(response.status).toBe(200);
@@ -169,7 +183,7 @@ describe("Transaction - FindByDate", () => {
     const response = await request(app)
       .get("/transaction/date")
       .query({
-        id: 1783367341294,
+        id: accountId,
         createdat: "",
       })
       .set("Authorization", token);
@@ -181,7 +195,7 @@ describe("Transaction - FindByDate", () => {
       .get("/transaction/date")
       .query({
         id: "",
-        createdat: "2026/07/10",
+        createdat: createdAt,
       })
       .set("Authorization", token);
     expect(response.status).toBe(400); //BUG-003 - Business Validation Errors Return HTTP 500

@@ -1,21 +1,27 @@
 import request from "supertest";
 import { app } from "../../app";
-import { describe, expect, test, beforeEach } from "@jest/globals";
+import { describe, expect, test, beforeEach, beforeAll } from "@jest/globals";
 import { MissingFields } from "../../error/MissingFields";
 import { invalidPassword, invalidUser } from "../../error/UserError";
 import { invalidAccount } from "../../error/AccountError";
 import { invalidId, invalidToken } from "../../error/AuthenticatorError";
-
+import { createTestUser } from "../helpers/createTestUser";
 //login
 describe("Account - Login", () => {
   test("Should login successfully", async () => {
+    const username = `teste_${Date.now()}`;
+
+    await request(app).post("/user/signup").send({
+      username,
+      password: "Senha123",
+    });
+
     const response = await request(app).post("/account/login").send({
-      username: "Manoel",
+      username,
       password: "Senha123",
     });
     expect(response.status).toBe(200);
     expect(typeof response.body.token).toBe("string");
-    
   });
   test("Should return error when username does not exists", async () => {
     const response = await request(app).post("/account/login").send({
@@ -39,9 +45,7 @@ describe("Account - Login", () => {
       password: "Senha12",
     });
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe(
-      new invalidPassword().message
-    );
+    expect(response.body.message).toBe(new invalidPassword().message);
   });
   test("Should return when user not found", async () => {
     const response = await request(app).post("/account/login").send({
@@ -56,18 +60,18 @@ describe("Account - Login", () => {
 //accountId
 describe("Account - By ID", () => {
   let token: string;
-  beforeEach(async () => {
-    const login = await request(app).post("/account/login").send({
-      username: "Manoel",
-      password: "Senha123",
-    });
+  let accountId: number;
 
-    token = login.body.token;
+  beforeEach(async () => {
+    const user = await createTestUser();
+
+    token = user.token;
+    accountId = user.accountId;
   });
   test("Should find account by user id", async () => {
     const response = await request(app)
       .get("/account")
-      .query({ id: 1783367341294 })
+      .query({ id: accountId })
       .set("Authorization", token);
 
     expect(response.status).toBe(200);
