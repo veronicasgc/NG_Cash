@@ -18,4 +18,7 @@ export class BaseDatabase {
                
         }
     })
+      public static async destroyConnection() {
+    await BaseDatabase.connection.destroy();
+  }
 } 
