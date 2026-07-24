@@ -100,7 +100,7 @@ Essa abordagem garante que o projeto permaneça funcional independentemente do a
 
 A documentação completa da API, contendo exemplos de requisição e resposta, está disponível no Postman:
 
-👉 https://documenter.getpostman.com/view/21025086/2s8Yt1qozv
+👉https://documenter.getpostman.com/view/21025086/2s8Yt1qozv
 
 ---
 
@@ -109,7 +109,7 @@ A documentação completa da API, contendo exemplos de requisição e resposta, 
 ### Clone o repositório
 
 ```bash
-git clone <URL_DO_REPOSITORIO>
+git clone https://github.com/veronicasgc/NG_Cash
 ```
 
 ### Acesse a pasta
